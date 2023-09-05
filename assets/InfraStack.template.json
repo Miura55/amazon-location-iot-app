@@ -284,9 +284,12 @@
           "Actions": [
             {
               "Location": {
-                "DeviceId": "${deviceId}",
-                "Latitude": "${latitude}",
-                "Longitude": "${longitude}",
+                "DeviceId": "${payload.device_id}",
+                "Latitude": "${payload.lat}",
+                "Longitude": "${payload.lon}",
+                "Timestamp": {
+                  "Value": "${timestamp()}"
+                },
                 "RoleArn": {
                   "Fn::GetAtt": [
                     "IotTrackerRole827EEDA4",
@@ -311,7 +314,7 @@
               }
             }
           },
-          "Sql": "SELECT * FROM 'assets/tracker'"
+          "Sql": "SELECT * FROM 'core2/gps'"
         },
         "RuleName": "AssetTrackingRule"
       }
