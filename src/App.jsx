@@ -6,7 +6,7 @@ import useTracker from "./hooks/useTracker";
 
 function App() {
   const [trackerPositions] = useTracker({
-    DeviceId: "thing123",
+    DeviceId: "core2",
     TrackerName: "trackerAsset01", // This is the Tracker name, change it according to your own setup
     EndTimeExclusive: new Date(),
     StartTimeInclusive: new Date(
@@ -18,9 +18,9 @@ function App() {
     <>
       <MapView
         initialViewState={{
-          longitude: -123.1169,
-          latitude: 49.2824,
-          zoom: 16,
+          longitude: 137.1676,
+          latitude: 34.9548,
+          zoom: 15,
         }}
         style={{ width: "100vw", height: "100vh" }}
       >
