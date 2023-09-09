@@ -1,5 +1,6 @@
 import { MapView } from "@aws-amplify/ui-react-geo";
 import { NavigationControl } from "react-map-gl";
+import { DateTime } from "luxon";
 import Markers from "./components/Markers";
 import LineOverlay from "./components/LineOverlay";
 import useTracker from "./hooks/useTracker";
@@ -8,10 +9,8 @@ function App() {
   const [trackerPositions] = useTracker({
     DeviceId: "core2",
     TrackerName: "trackerAsset01", // This is the Tracker name, change it according to your own setup
-    EndTimeExclusive: new Date(),
-    StartTimeInclusive: new Date(
-      new Date().getTime() - 1000 * 60 * 60 * 24 * 30
-    ),
+    EndTimeExclusive: DateTime.local().toJSDate(),
+    StartTimeInclusive: DateTime.local().minus({ days: 30 }).toJSDate(),
   });
 
   return (
