@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import Markers from "./components/Markers";
 import LineOverlay from "./components/LineOverlay";
 import useTracker from "./hooks/useTracker";
+import ControlPanel from "./components/ControlPanel";
 
 function App() {
   const [trackerPositions] = useTracker({
@@ -15,13 +16,14 @@ function App() {
 
   return (
     <>
+      <ControlPanel />
       <MapView
         initialViewState={{
           longitude: 137.1676,
           latitude: 34.9548,
           zoom: 14,
         }}
-        style={{ width: "100vw", height: "100vh" }}
+        style={{ width: "100vw", height: "80vh" }}
       >
         <NavigationControl showCompass={false} />
         <Markers trackerPositions={trackerPositions} />
