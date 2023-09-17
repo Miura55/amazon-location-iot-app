@@ -19,7 +19,7 @@ function App() {
         initialViewState={{
           longitude: 137.1676,
           latitude: 34.9548,
-          zoom: 15,
+          zoom: 14,
         }}
         style={{ width: "100vw", height: "100vh" }}
       >

@@ -34,6 +34,16 @@ const useTracker = (requestParams) => {
             throw new Error("No device position history found");
           }
           setTrackerPositions(res.DevicePositions);
+          if (res.NextToken) {
+            requestParams.NextToken = res.NextToken;
+            const nextRes = await locationClient.current.send(
+              new GetDevicePositionHistoryCommand(requestParams)
+            );
+            setTrackerPositions((prevState) => [
+              ...prevState,
+              ...nextRes.DevicePositions,
+            ]);
+          }
         } catch (error) {
           console.error("Unable to get tracker positions", error);
           throw error;
