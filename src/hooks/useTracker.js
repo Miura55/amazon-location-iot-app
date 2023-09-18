@@ -9,10 +9,17 @@ import {
 const useTracker = (requestParams) => {
   const locationClient = useRef();
   const [trackerPositions, setTrackerPositions] = useState([]);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getTracerLocations = async () => {
+      // If StartTimeInclusive or EndTimeExclusive are not null, set them(Luxon object) to Date objects
+      if (requestParams.StartTimeInclusive) {
+        requestParams.StartTimeInclusive = requestParams.StartTimeInclusive.toJSDate();
+      }
+      if (requestParams.EndTimeExclusive) {
+        requestParams.EndTimeExclusive = requestParams.EndTimeExclusive.toJSDate();
+      }
+      
       // If the transformer is ready, create a new LocationClient instance if one doesn't exist
       if (!locationClient.current) {
         const credentials = await Auth.currentCredentials();
@@ -25,36 +32,34 @@ const useTracker = (requestParams) => {
         });
       }
       // If the trackerPositions state is empty, fetch the device position history
-      if (trackerPositions.length === 0) {
-        try {
-          const res = await locationClient.current.send(
-            new GetDevicePositionHistoryCommand(requestParams)
-          );
-          if (res.DevicePositions.length === 0) {
-            throw new Error("No device position history found");
-          }
-          setTrackerPositions(res.DevicePositions);
-          if (res.NextToken) {
-            requestParams.NextToken = res.NextToken;
-            const nextRes = await locationClient.current.send(
-              new GetDevicePositionHistoryCommand(requestParams)
-            );
-            setTrackerPositions((prevState) => [
-              ...prevState,
-              ...nextRes.DevicePositions,
-            ]);
-          }
-        } catch (error) {
-          console.error("Unable to get tracker positions", error);
-          throw error;
+      try {
+        const res = await locationClient.current.send(
+          new GetDevicePositionHistoryCommand(requestParams)
+        );
+        if (res.DevicePositions.length === 0) {
+          throw new Error("No device position history found");
         }
+        setTrackerPositions(res.DevicePositions);
+        // if (res.NextToken) {
+        //   requestParams.NextToken = res.NextToken;
+        //   const nextRes = await locationClient.current.send(
+        //     new GetDevicePositionHistoryCommand(requestParams)
+        //   );
+        //   setTrackerPositions((prevState) => [
+        //     ...prevState,
+        //     ...nextRes.DevicePositions,
+        //   ]);
+        // }
+      } catch (error) {
+        console.error("Unable to get tracker positions", error);
+        throw error;
       }
     };
 
     getTracerLocations();
-  }, [trackerPositions, setError, requestParams]);
+  }, []);
 
-  return [trackerPositions, error];
+  return trackerPositions;
 };
 
 export default useTracker;
