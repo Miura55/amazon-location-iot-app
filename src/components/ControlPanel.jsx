@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { View, Text, Card, Flex, Button } from "@aws-amplify/ui-react";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
@@ -16,7 +16,7 @@ function ControlPanel() {
           <Text fontSize={"medium"} fontWeight={400}>
             Start Time
           </Text>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <LocalizationProvider dateAdapter={AdapterLuxon}>
             <DemoContainer components={["DateTimePicker"]}>
               <DateTimePicker />
             </DemoContainer>
@@ -26,7 +26,7 @@ function ControlPanel() {
           <Text fontSize={"medium"} fontWeight={400}>
             End Time
           </Text>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <LocalizationProvider dateAdapter={AdapterLuxon}>
             <DemoContainer components={["DateTimePicker"]}>
               <DateTimePicker />
             </DemoContainer>
