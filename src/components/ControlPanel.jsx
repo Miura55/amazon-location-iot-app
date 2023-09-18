@@ -6,6 +6,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 function ControlPanel() {
+  const handleDateTimeChange = (date) => {
+    console.log(date);
+  };
+
   return (
     <View padding="10px" height={"10rem"}>
       <Text fontSize={"large"} fontWeight={550}>
@@ -18,7 +22,7 @@ function ControlPanel() {
           </Text>
           <LocalizationProvider dateAdapter={AdapterLuxon}>
             <DemoContainer components={["DateTimePicker"]}>
-              <DateTimePicker />
+              <DateTimePicker onChange={handleDateTimeChange} />
             </DemoContainer>
           </LocalizationProvider>
         </Card>
@@ -28,7 +32,7 @@ function ControlPanel() {
           </Text>
           <LocalizationProvider dateAdapter={AdapterLuxon}>
             <DemoContainer components={["DateTimePicker"]}>
-              <DateTimePicker />
+              <DateTimePicker onChange={handleDateTimeChange} />
             </DemoContainer>
           </LocalizationProvider>
         </Card>
