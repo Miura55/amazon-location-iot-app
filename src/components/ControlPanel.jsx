@@ -1,14 +1,14 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { View, Text, Card, Flex, Button } from "@aws-amplify/ui-react";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DateTime } from "luxon";
 
-function ControlPanel() {
-  const handleDateTimeChange = (date) => {
-    console.log(date);
-  };
+function ControlPanel({ handleDateTimeChange }) {
+  const [ startDateTime, setStartDateTime ] = useState(DateTime.local()); // [1]
+  const [ endDateTime, setEndDateTime ] = useState(DateTime.local().minus({ days: 30 })); // [2]
 
   return (
     <View padding="10px" height={"10rem"}>
@@ -22,7 +22,7 @@ function ControlPanel() {
           </Text>
           <LocalizationProvider dateAdapter={AdapterLuxon}>
             <DemoContainer components={["DateTimePicker"]}>
-              <DateTimePicker onChange={handleDateTimeChange} />
+              <DateTimePicker onChange={setStartDateTime} />
             </DemoContainer>
           </LocalizationProvider>
         </Card>
@@ -32,7 +32,7 @@ function ControlPanel() {
           </Text>
           <LocalizationProvider dateAdapter={AdapterLuxon}>
             <DemoContainer components={["DateTimePicker"]}>
-              <DateTimePicker onChange={handleDateTimeChange} />
+              <DateTimePicker onChange={setEndDateTime} />
             </DemoContainer>
           </LocalizationProvider>
         </Card>
@@ -43,7 +43,7 @@ function ControlPanel() {
           height={"4rem"}
           width={"6rem"}
           onClick={() => {
-            console.log("clicked");
+            handleDateTimeChange(startDateTime, endDateTime);
           }}
         >
           Filter
