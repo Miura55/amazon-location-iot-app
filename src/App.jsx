@@ -21,7 +21,6 @@ function App() {
     (async () => {
       const requestStartDateTime = startDateTime ? startDateTime.toJSDate() : null;
       const requestEndDateTime = endDateTime ? endDateTime.toJSDate() : null;
-      console.log(requestStartDateTime, requestEndDateTime);
       
       // If the transformer is ready, create a new LocationClient instance if one doesn't exist
       if (!locationClient.current) {
@@ -36,13 +35,14 @@ function App() {
       }
       // If the trackerPositions state is empty, fetch the device position history
       try {
+        const requestParams = {
+          DeviceId: "core2",
+          TrackerName: "trackerAsset01", // This is the Tracker name, change it according to your own setup
+          EndTimeExclusive: requestEndDateTime,
+          StartTimeInclusive: requestStartDateTime,
+        };
         const res = await locationClient.current.send(
-          new GetDevicePositionHistoryCommand({
-            DeviceId: "core2",
-            TrackerName: "trackerAsset01", // This is the Tracker name, change it according to your own setup
-            EndTimeExclusive: requestEndDateTime,
-            StartTimeInclusive: requestStartDateTime,
-          })
+          new GetDevicePositionHistoryCommand(requestParams)
         );
         if (res.DevicePositions.length === 0) {
           throw new Error("No device position history found");
@@ -58,6 +58,7 @@ function App() {
         //     ...nextRes.DevicePositions,
         //   ]);
         // }
+        console.log(`Length of trackerPositions: ${trackerPositions.length}`)
       } catch (error) {
         console.error("Unable to get tracker positions", error);
         throw error;
