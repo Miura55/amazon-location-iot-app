@@ -48,16 +48,19 @@ function App() {
           throw new Error("No device position history found");
         }
         setTrackerPositions(res.DevicePositions);
-        // if (res.NextToken) {
-        //   requestParams.NextToken = res.NextToken;
-        //   const nextRes = await locationClient.current.send(
-        //     new GetDevicePositionHistoryCommand(requestParams)
-        //   );
-        //   setTrackerPositions((prevState) => [
-        //     ...prevState,
-        //     ...nextRes.DevicePositions,
-        //   ]);
-        // }
+
+        // If there are more results, fetch them and add them to the trackerPositions state
+        requestParams.NextToken = res.NextToken;
+        while (requestParams.NextToken) {
+          const nextRes = await locationClient.current.send(
+            new GetDevicePositionHistoryCommand(requestParams)
+          );
+          setTrackerPositions((prevState) => [
+            ...prevState,
+            ...nextRes.DevicePositions,
+          ]);
+          requestParams.NextToken = nextRes.NextToken;
+        }
         console.log(`Length of trackerPositions: ${trackerPositions.length}`)
       } catch (error) {
         console.error("Unable to get tracker positions", error);
