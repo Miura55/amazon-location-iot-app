@@ -10,7 +10,7 @@ def lambda_handler(event, context):
     # Push E-Mail
     params = {
         'TopicArn': 'arn:aws:sns:ap-northeast-1:1234567890:GeofenceEvent',
-        'Subject': 'GNS Tracker Event',
+        'Subject': 'GPS Tracker Event',
         'Message': json.dumps(event, indent=2)
     }
     sns.publish(**params)
