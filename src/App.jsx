@@ -16,12 +16,15 @@ function App() {
   const [startDateTime, setStartDateTime] = useState(null); // [1]
   const [endDateTime, setEndDateTime] = useState(null); // [2]
   const [trackerPositions, setTrackerPositions] = useState([]); // [3]
+  const [isNotFound, setIsNotFound] = useState(false); // [4]
 
   useEffect(() => {
     (async () => {
-      const requestStartDateTime = startDateTime ? startDateTime.toJSDate() : null;
+      const requestStartDateTime = startDateTime
+        ? startDateTime.toJSDate()
+        : null;
       const requestEndDateTime = endDateTime ? endDateTime.toJSDate() : null;
-      
+
       // If the transformer is ready, create a new LocationClient instance if one doesn't exist
       if (!locationClient.current) {
         const credentials = await Auth.currentCredentials();
@@ -35,6 +38,7 @@ function App() {
       }
       // If the trackerPositions state is empty, fetch the device position history
       try {
+        isNotFound && setIsNotFound(false);
         const requestParams = {
           DeviceId: "core2",
           TrackerName: "trackerAsset01", // This is the Tracker name, change it according to your own setup
@@ -45,6 +49,7 @@ function App() {
           new GetDevicePositionHistoryCommand(requestParams)
         );
         if (res.DevicePositions.length === 0) {
+          setIsNotFound(true);
           throw new Error("No device position history found");
         }
         setTrackerPositions(res.DevicePositions);
@@ -61,7 +66,8 @@ function App() {
           ]);
           requestParams.NextToken = nextRes.NextToken;
         }
-        console.log(`Length of trackerPositions: ${trackerPositions.length}`)
+        setIsNotFound(false);
+        console.log(`Length of trackerPositions: ${trackerPositions.length}`);
       } catch (error) {
         console.error("Unable to get tracker positions", error);
         throw error;
@@ -71,12 +77,13 @@ function App() {
 
   return (
     <>
-      <ControlPanel handleDateTimeChange={
-        (startDateTime, endDateTime) => {
+      <ControlPanel
+        handleDateTimeChange={(startDateTime, endDateTime) => {
           setStartDateTime(startDateTime);
           setEndDateTime(endDateTime);
-        }
-      }/>
+        }}
+        isNotFound={isNotFound}
+      />
       <MapView
         initialViewState={{
           longitude: 137.1676,

@@ -1,21 +1,31 @@
 import { memo, useState } from "react";
-import { View, Text, Card, Flex, Button } from "@aws-amplify/ui-react";
+import { View, Text, Card, Flex, Button, Alert } from "@aws-amplify/ui-react";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DateTime } from "luxon";
 
-function ControlPanel({ handleDateTimeChange }) {
-  const [ startDateTime, setStartDateTime ] = useState(DateTime.local()); // [1]
-  const [ endDateTime, setEndDateTime ] = useState(DateTime.local().minus({ days: 30 })); // [2]
+function ControlPanel({ handleDateTimeChange, isNotFound }) {
+  const [startDateTime, setStartDateTime] = useState(DateTime.local()); // [1]
+  const [endDateTime, setEndDateTime] = useState(
+    DateTime.local().minus({ days: 30 })
+  ); // [2]
 
   return (
-    <View padding="10px" height={"10rem"}>
+    <View padding="10px">
       <Text fontSize={"large"} fontWeight={550}>
         Travel Log
       </Text>
-      <Flex direction="row" justifyContent={"center"} alignItems={'center'} wrap={"nowrap"}>
+      {isNotFound && (
+        <Alert variation="error">No device position history found</Alert>
+      )}
+      <Flex
+        direction="row"
+        justifyContent={"center"}
+        alignItems={"center"}
+        wrap={"nowrap"}
+      >
         <Card>
           <Text fontSize={"medium"} fontWeight={400}>
             Start Time
